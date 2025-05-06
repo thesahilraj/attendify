@@ -1,25 +1,27 @@
 # Attendify: QR-Based Attendance Management System
 
 ## Team Members
-- [Your Name]
-- [Team Member 2 Name] (if applicable)
-- [Team Member 3 Name] (if applicable)
+- Sahil Raj (2401410004)
+- Nirmit Dudeja (2401410022)
+- Pallavi Baiju (2401410030)
+- Dhuruv (2401410032)
 
 ## Project Description
 Attendify is a web-based QR code attendance tracking system designed for educational institutions. It streamlines the attendance process by allowing teachers to generate unique QR codes for each class session, which students can scan using their devices to mark their attendance. The system provides real-time attendance tracking, comprehensive reporting, and user-friendly interfaces for administrators, teachers, and students.
 
-## [Video Explanation](https://youtu.be/your-video-id)
-*Please replace the link above with your actual video explanation URL*
+## [Video Explanation]
+[![Watch the Video](https://img.icons8.com/ios-filled/452/circled-play.png)](https://github.com/)
 
 ## Technologies Used
-- **Backend**: PHP (Procedural & OOP)
-- **Database**: MySQL
-- **Frontend**: HTML, CSS, JavaScript, Bootstrap 5
-- **QR Generation**: Google Charts API
-- **QR Scanning**: Instascan.js
-- **Data Visualization**: Chart.js
+- **Backend**: Python (Django 5.1.7)
+- **Database**: MySQL (via `mysqlclient`)
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap 5, crispy-bootstrap5
+- **QR Generation**: `qrcode` Python package
+- **QR Scanning**: Instascan
+- **Image Handling**: Pillow
+- **Forms**: django-crispy-forms
 - **Tables**: DataTables
-
+- 
 ## Features
 - **User Authentication**: Secure login for administrators, teachers, and students
 - **Role-Based Access Control**: Different interfaces and permissions for each user type
@@ -33,44 +35,34 @@ Attendify is a web-based QR code attendance tracking system designed for educati
 ## Installation & Setup
 
 ### Requirements
-- PHP 7.4 or higher
+- Python 3.10 or higher
+- Django 5.1.7
 - MySQL 5.7 or higher
-- Web server (Apache/Nginx)
+- Virtual environment tool (optional but recommended)
 
 ### Installation Steps
 1. **Clone the repository**
-   ```
-   git clone https://github.com/yourusername/attendify.git
+   git clone https://github.com/thesahilraj/attendify.git
    cd attendify
-   ```
 
-2. **Database Setup**
-   - Create a MySQL database
-   - Import the database schema from `database/schema.sql`
+2. **Create a virtual environment (optional but recommended)**
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
 
-3. **Configuration**
-   - Edit `config/database.php` with your database credentials:
-     ```php
-     define('DB_HOST', 'your_database_host');
-     define('DB_USER', 'your_database_username');
-     define('DB_PASS', 'your_database_password');
-     define('DB_NAME', 'your_database_name');
-     ```
-   - Edit `config/config.php` for site configuration if needed
+3. **Install dependencies**
+   pip install -r requirements.txt
 
-4. **Directory Permissions**
-   - Ensure the `uploads` directory and its subdirectories are writable:
-     ```
-     chmod -R 755 uploads/
-     ```
+4. **Configure database**
+   Update `settings.py` with your MySQL database credentials under `DATABASES`
 
-5. **Web Server Configuration**
-   - Point your web server to the project directory
-   - Ensure .htaccess is properly configured for Apache
+5. **Apply migrations**
+   python manage.py migrate
 
-6. **Access the Application**
-   - Navigate to `http://your-server/attendify` in your web browser
-   - Use the installation wizard if it's the first time running the application
+6. **Create superuser (admin)**
+   python manage.py createsuperuser
+
+7. **Run the server**
+   python manage.py runserver
 
 ### Default Login Credentials
 - **Administrator**: 
@@ -108,11 +100,7 @@ Attendify is a web-based QR code attendance tracking system designed for educati
 - Role-based access control
 - Session security measures
 
-## License
-[Your License Information]
-
 ## Acknowledgements
 - Bootstrap for the responsive UI framework
 - Instascan.js for the QR code scanning functionality
-- Chart.js for data visualization
-- DataTables for enhanced table functionality 
+- DataTables for enhanced table functionality
