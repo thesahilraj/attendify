@@ -10,7 +10,7 @@
 Attendify is a web-based QR code attendance tracking system designed for educational institutions. It streamlines the attendance process by allowing teachers to generate unique QR codes for each class session, which students can scan using their devices to mark their attendance. The system provides real-time attendance tracking, comprehensive reporting, and user-friendly interfaces for administrators, teachers, and students.
 
 ## [Video Explanation]
-[![Watch the Video](https://img.icons8.com/ios-filled/452/circled-play.png)](https://github.com/)
+[![Watch the Video](https://raw.githubusercontent.com/thesahilraj/attendify/refs/heads/main/FILES/screenshots/teacher-dashboard.png)](https://github.com/)
 
 ## Technologies Used
 - **Backend**: Python (Django 5.1.7)
