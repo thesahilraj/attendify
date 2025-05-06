@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.name }} - Attendify{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item active">{{ course.code }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Course Details</h4>
+                <div>
+                    <a href="{% url 'course_update' pk=course.id %}" class="btn btn-sm btn-light">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'course_delete' pk=course.id %}" class="btn btn-sm btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5>{{ course.name }}</h5>
+                <p><strong>Code:</strong> {{ course.code }}</p>
+                <p><strong>Description:</strong> {{ course.description|default:"No description available" }}</p>
+                <p><strong>Created:</strong> {{ course.created_at|date:"M d, Y" }}</p>
+                <p><strong>Last Updated:</strong> {{ course.updated_at|date:"M d, Y" }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Class Sessions</h4>
+                <a href="{% url 'session_create_for_course' course_id=course.id %}" class="btn btn-light">
+                    <i class="fas fa-plus"></i> Add Session
+                </a>
+            </div>
+            <div class="card-body">
+                {% if sessions %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Room</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for session in sessions %}
+                                    <tr>
+                                        <td>{{ session.date }}</td>
+                                        <td>{{ session.start_time }} - {{ session.end_time }}</td>
+                                        <td>{{ session.room|default:"Not specified" }}</td>
+                                        <td>
+                                            {% if session.is_active %}
+                                                <span class="badge bg-success">Active</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Inactive</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'session_detail' pk=session.id %}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                                <a href="{% url 'session_update' pk=session.id %}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </a>
+                                                <a href="{% url 'session_delete' pk=session.id %}" class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>No class sessions found for this course. <a href="{% url 'session_create_for_course' course_id=course.id %}">Create your first session</a>.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

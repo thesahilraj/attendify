@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Teacher Registration - Attendify{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Teacher Registration</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-plus fa-3x text-secondary mb-3"></i>
+                    <h5>Create Your Teacher Account</h5>
+                    <p class="text-muted">Fill in the form below to register as a teacher</p>
+                </div>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_username">Username</label>
+                                <input type="text" name="username" class="form-control" id="id_username" placeholder="Username" required>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_email">Email</label>
+                                <input type="email" name="email" class="form-control" id="id_email" placeholder="Email" required>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_first_name">First Name</label>
+                                <input type="text" name="first_name" class="form-control" id="id_first_name" placeholder="First Name">
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_last_name">Last Name</label>
+                                <input type="text" name="last_name" class="form-control" id="id_last_name" placeholder="Last Name">
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_phone_number">Phone Number</label>
+                                <input type="text" name="phone_number" class="form-control" id="id_phone_number" placeholder="Phone Number">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_employee_id">Employee ID</label>
+                                <input type="text" name="employee_id" class="form-control" id="id_employee_id" placeholder="Employee ID" required>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_department">Department</label>
+                                <input type="text" name="department" class="form-control" id="id_department" placeholder="Department" required>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_designation">Designation</label>
+                                <input type="text" name="designation" class="form-control" id="id_designation" placeholder="Designation" required>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="id_profile_picture">Profile Picture</label>
+                                <input type="file" name="profile_picture" class="form-control" id="id_profile_picture">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_password1">Password</label>
+                                <input type="password" name="password1" class="form-control" id="id_password1" placeholder="Password" required>
+                                <small class="form-text text-muted">
+                                    Your password must contain at least 8 characters and can't be entirely numeric.
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_password2">Confirm Password</label>
+                                <input type="password" name="password2" class="form-control" id="id_password2" placeholder="Confirm Password" required>
+                                <small class="form-text text-muted">
+                                    Enter the same password as before, for verification.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Register as Teacher
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center p-3">
+                <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="fw-bold">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

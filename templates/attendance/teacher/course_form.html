@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if form.instance.id %}Edit Course{% else %}Create Course{% endif %} - Attendify
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item active">
+                    {% if form.instance.id %}Edit Course{% else %}Create Course{% endif %}
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    {% if form.instance.id %}Edit Course{% else %}Create Course{% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'course_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 
+                            {% if form.instance.id %}Update{% else %}Create{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

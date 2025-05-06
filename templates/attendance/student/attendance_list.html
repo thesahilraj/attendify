@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}My Attendance - Attendify{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">My Attendance History</h4>
+            </div>
+            <div class="card-body">
+                {% if attendances %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Marked At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attendance in attendances %}
+                                    <tr>
+                                        <td>{{ attendance.session.course.name }} ({{ attendance.session.course.code }})</td>
+                                        <td>{{ attendance.session.date }}</td>
+                                        <td>{{ attendance.session.start_time }} - {{ attendance.session.end_time }}</td>
+                                        <td>
+                                            {% if attendance.is_present %}
+                                                <span class="badge bg-success">Present</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Absent</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ attendance.timestamp }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>You haven't marked any attendance yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

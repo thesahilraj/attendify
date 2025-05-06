@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Login - Attendify{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Login</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="fas fa-qrcode fa-3x text-primary mb-3"></i>
+                    <h5>Welcome to Attendify</h5>
+                    <p class="text-muted">Please sign in to continue</p>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center p-3">
+                <p class="mb-2">Don't have an account? Register as:</p>
+                <div class="row">
+                    <div class="col-6">
+                        <a href="{% url 'student_registration' %}" class="btn btn-outline-primary w-100" id="student-reg-btn">
+                            <i class="fas fa-user-graduate me-1"></i> Student
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'teacher_registration' %}" class="btn btn-outline-secondary w-100" id="teacher-reg-btn">
+                            <i class="fas fa-chalkboard-teacher me-1"></i> Teacher
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body py-3">
+                            <i class="fas fa-user-graduate text-primary fa-2x mb-2"></i>
+                            <h6>Students</h6>
+                            <p class="text-muted small mb-0">Mark attendance easily</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body py-3">
+                            <i class="fas fa-chalkboard-teacher text-secondary fa-2x mb-2"></i>
+                            <h6>Teachers</h6>
+                            <p class="text-muted small mb-0">Track attendance effortlessly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click event listeners to registration buttons
+        const studentRegBtn = document.getElementById('student-reg-btn');
+        const teacherRegBtn = document.getElementById('teacher-reg-btn');
+        
+        if (studentRegBtn) {
+            studentRegBtn.addEventListener('click', function(e) {
+                console.log('Student registration button clicked');
+                console.log('Navigating to:', this.getAttribute('href'));
+            });
+        }
+        
+        if (teacherRegBtn) {
+            teacherRegBtn.addEventListener('click', function(e) {
+                console.log('Teacher registration button clicked');
+                console.log('Navigating to:', this.getAttribute('href'));
+            });
+        }
+    });
+</script>
+{% endblock %} 

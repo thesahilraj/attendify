@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses - Attendify{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Available Courses</h4>
+            </div>
+            <div class="card-body">
+                {% if courses %}
+                    <div class="row">
+                        {% for course in courses %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">{{ course.code }}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ course.name }}</h6>
+                                        <p class="card-text">{{ course.description|default:"No description available"|truncatewords:20 }}</p>
+                                        <p><strong>Teacher:</strong> {{ course.teacher.get_full_name|default:course.teacher.username }}</p>
+                                        <p><strong>Department:</strong> {{ course.teacher.teacher_profile.department }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>No courses available at the moment.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

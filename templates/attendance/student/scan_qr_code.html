@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Scan QR Code - Attendify{% endblock %}
+
+{% block extra_css %}
+<style>
+    #qr-reader {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    #qr-reader__scan_region {
+        position: relative;
+    }
+    
+    #qr-reader__scan_region::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid var(--primary);
+        z-index: 1;
+    }
+    
+    .scanner-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .scanner-instructions {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: var(--light-bg);
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-camera me-2"></i>Scan QR Code</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="scanner-container">
+                            <h5 class="mb-3 text-center"><i class="fas fa-qrcode me-2"></i>QR Code Scanner</h5>
+                            <div id="qr-reader"></div>
+                            <div class="scanner-instructions">
+                                <p class="mb-1"><i class="fas fa-info-circle me-2 text-primary"></i>Point your camera at a QR code to scan it.</p>
+                                <p class="mb-0"><i class="fas fa-lightbulb me-2 text-accent"></i>Make sure the QR code is well-lit and clearly visible.</p>
+                            </div>
+                            <div class="d-grid gap-2 mt-3">
+                                <button id="start-scanner" class="btn btn-primary">
+                                    <i class="fas fa-play-circle me-2"></i>Start Scanner
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-keyboard me-2"></i>Manual Entry</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mb-3">If scanning doesn't work, you can manually enter the QR code:</p>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {{ form|crispy }}
+                                    <div class="d-grid gap-2 mt-3">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-paper-plane me-2"></i>Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Help</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="accordion" id="scanHelpAccordion">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                                Camera not working?
+                                            </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#scanHelpAccordion">
+                                            <div class="accordion-body">
+                                                <p>Make sure you've granted camera permissions to this website. Check your browser settings if you're having issues.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                                QR code not scanning?
+                                            </button>
+                                        </h2>
+                                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#scanHelpAccordion">
+                                            <div class="accordion-body">
+                                                <p>Try the following:</p>
+                                                <ul>
+                                                    <li>Make sure the QR code is well-lit</li>
+                                                    <li>Hold your device steady</li>
+                                                    <li>Ensure the entire QR code is visible</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const html5QrCode = new Html5Qrcode("qr-reader");
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            // Stop scanning
+            html5QrCode.stop().then(() => {
+                console.log('QR Code scanning stopped.');
+                // Set the value in the form
+                document.getElementById('id_qr_code').value = decodedText;
+                // Show success message
+                const scannerContainer = document.querySelector('.scanner-container');
+                scannerContainer.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-check-circle text-success fa-4x mb-3"></i>
+                        <h4>QR Code Scanned Successfully!</h4>
+                        <p class="text-muted">Code: ${decodedText.substring(0, 8)}...</p>
+                        <div class="spinner-border text-primary mt-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Submitting attendance...</p>
+                    </div>
+                `;
+                // Submit the form
+                setTimeout(() => {
+                    document.querySelector('form').submit();
+                }, 1000);
+            }).catch((err) => {
+                console.error('Failed to stop QR Code scanning.', err);
+            });
+        };
+        
+        const config = { 
+            fps: 10, 
+            qrbox: { width: 250, height: 250 },
+            rememberLastUsedCamera: true
+        };
+        
+        document.getElementById('start-scanner').addEventListener('click', function() {
+            const button = this;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Starting Camera...';
+            button.disabled = true;
+            
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                qrCodeSuccessCallback
+            ).then(() => {
+                button.innerHTML = '<i class="fas fa-camera me-2"></i>Scanner Active';
+                button.classList.remove('btn-primary');
+                button.classList.add('btn-success');
+            }).catch((err) => {
+                console.error('Error starting QR Code scanner:', err);
+                button.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Start Scanner';
+                button.disabled = false;
+                alert('Could not start camera. Please check camera permissions or use manual entry.');
+            });
+        });
+    });
+</script>
+{% endblock %} 

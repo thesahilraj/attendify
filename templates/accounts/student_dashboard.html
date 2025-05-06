@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard - Attendify{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Student Dashboard</h4>
+            </div>
+            <div class="card-body">
+                <h5>Welcome, {{ user.get_full_name|default:user.username }}!</h5>
+                <p>You are logged in as a student. Here's what you can do:</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-book fa-3x mb-3 text-primary"></i>
+                                <h5 class="card-title">View Courses</h5>
+                                <p class="card-text">Browse available courses</p>
+                                <a href="{% url 'student_course_list' %}" class="btn btn-primary">Courses</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-qrcode fa-3x mb-3 text-primary"></i>
+                                <h5 class="card-title">Scan QR Code</h5>
+                                <p class="card-text">Mark your attendance by scanning QR codes</p>
+                                <a href="{% url 'scan_qr_code' %}" class="btn btn-primary">Scan QR</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clipboard-list fa-3x mb-3 text-primary"></i>
+                                <h5 class="card-title">My Attendance</h5>
+                                <p class="card-text">View your attendance history</p>
+                                <a href="{% url 'student_attendance_list' %}" class="btn btn-primary">View Attendance</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

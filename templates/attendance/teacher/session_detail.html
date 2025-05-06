@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Session Details - Attendify{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'course_detail' pk=session.course.id %}">{{ session.course.code }}</a></li>
+                <li class="breadcrumb-item active">Session Details</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Session Details</h4>
+                <div>
+                    <a href="{% url 'session_update' pk=session.id %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'session_delete' pk=session.id %}" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-3">{{ session.course.name }} ({{ session.course.code }})</h5>
+                        <p><i class="fas fa-calendar-day me-2"></i><strong>Date:</strong> {{ session.date }}</p>
+                        <p><i class="fas fa-clock me-2"></i><strong>Time:</strong> {{ session.start_time }} - {{ session.end_time }}</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i><strong>Room:</strong> {{ session.room|default:"Not specified" }}</p>
+                        <p><i class="fas fa-toggle-on me-2"></i><strong>Status:</strong> 
+                            {% if session.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inactive</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="mb-3"><i class="fas fa-sticky-note me-2"></i>Notes</h5>
+                        <div class="p-3 bg-light rounded">
+                            {{ session.notes|default:"No notes available"|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Attendance List</h4>
+            </div>
+            <div class="card-body">
+                {% if attendances %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-user me-1"></i> Student</th>
+                                    <th><i class="fas fa-id-card me-1"></i> Roll Number</th>
+                                    <th><i class="fas fa-clock me-1"></i> Time</th>
+                                    <th><i class="fas fa-check-circle me-1"></i> Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attendance in attendances %}
+                                    <tr>
+                                        <td>{{ attendance.student.get_full_name|default:attendance.student.username }}</td>
+                                        <td>{{ attendance.student.student_profile.roll_number }}</td>
+                                        <td>{{ attendance.timestamp|date:"H:i:s" }}</td>
+                                        <td>
+                                            {% if attendance.is_present %}
+                                                <span class="status-present"><i class="fas fa-check-circle me-1"></i>Present</span>
+                                            {% else %}
+                                                <span class="status-absent"><i class="fas fa-times-circle me-1"></i>Absent</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>No attendance records found for this session.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-qrcode me-2"></i>QR Code</h4>
+            </div>
+            <div class="card-body">
+                {% if qr_code %}
+                    <div id="qr-code-container" class="qr-container">
+                        <img src="{{ qr_code.image.url }}" alt="QR Code" class="img-fluid mb-3" style="max-width: 250px;">
+                        <div class="mb-3 p-2 bg-light rounded">
+                            <small class="text-muted">Code:</small>
+                            <div class="text-monospace fw-bold" id="qr-code-value">{{ qr_code.code }}</div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-bold">Expires in:</span>
+                            <span id="countdown" class="badge bg-primary">Loading...</span>
+                        </div>
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="auto-refresh-toggle" checked>
+                            <label class="form-check-label" for="auto-refresh-toggle">Auto-refresh QR code</label>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button id="refresh-qr" class="btn btn-primary" data-qr-id="{{ qr_code.id }}">
+                                <i class="fas fa-sync-alt"></i> Refresh QR Code
+                            </button>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="fas fa-qrcode fa-4x mb-3 text-muted"></i>
+                        <p>No active QR code for this session.</p>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'generate_qr_code' session_id=session.id %}" class="btn btn-primary">
+                                <i class="fas fa-qrcode"></i> Generate QR Code
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Attendance Summary</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stats-card primary">
+                            <div class="number">{{ attendances|length }}</div>
+                            <div>Total</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stats-card success">
+                            <div class="number">{{ attendances|length }}</div>
+                            <div>Present</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if qr_code %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const expiresAt = new Date("{{ qr_code.expires_at|date:'c' }}");
+        const countdownElement = document.getElementById('countdown');
+        const refreshButton = document.getElementById('refresh-qr');
+        const autoRefreshToggle = document.getElementById('auto-refresh-toggle');
+        let autoRefreshTimer = null;
+        const qrCodeExpirationSeconds = {{ qr_code_expiration_seconds }};
+        
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = Math.max(0, Math.floor((expiresAt - now) / 1000));
+            
+            if (timeLeft <= 0) {
+                countdownElement.innerHTML = '<span class="text-danger">Expired</span>';
+                countdownElement.classList.remove('bg-primary', 'bg-warning');
+                countdownElement.classList.add('bg-secondary');
+                
+                // Auto-refresh if enabled
+                if (autoRefreshToggle.checked) {
+                    refreshQRCode();
+                }
+                return;
+            }
+            
+            // Change color based on time left
+            if (timeLeft < 10) {
+                countdownElement.classList.remove('bg-primary');
+                countdownElement.classList.add('bg-warning');
+            } else {
+                countdownElement.classList.remove('bg-warning');
+                countdownElement.classList.add('bg-primary');
+            }
+            
+            countdownElement.textContent = `${timeLeft} seconds`;
+            setTimeout(updateCountdown, 1000);
+        }
+        
+        function refreshQRCode() {
+            // Disable button during refresh
+            refreshButton.disabled = true;
+            refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+            
+            fetch(`/attendance/qr-codes/${refreshButton.getAttribute('data-qr-id')}/refresh/`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update expiration time
+                    expiresAt.setTime(new Date(data.expires_at).getTime());
+                    
+                    // Update QR code image with a cache-busting parameter
+                    const qrImage = document.querySelector('#qr-code-container img');
+                    qrImage.src = `${data.image_url}?t=${new Date().getTime()}`;
+                    
+                    // Update QR code value
+                    document.getElementById('qr-code-value').textContent = data.code;
+                    
+                    // Reset countdown
+                    updateCountdown();
+                    
+                    // Re-enable button
+                    refreshButton.disabled = false;
+                    refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh QR Code';
+                }
+            })
+            .catch(error => {
+                console.error('Error refreshing QR code:', error);
+                refreshButton.disabled = false;
+                refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh QR Code';
+                alert('Failed to refresh QR code. Please try again.');
+            });
+        }
+        
+        // Set up auto-refresh
+        function setupAutoRefresh() {
+            if (autoRefreshToggle.checked) {
+                // Auto-refresh every X seconds (matching the expiration time)
+                autoRefreshTimer = setInterval(refreshQRCode, qrCodeExpirationSeconds * 1000);
+            } else {
+                // Clear the timer if auto-refresh is disabled
+                if (autoRefreshTimer) {
+                    clearInterval(autoRefreshTimer);
+                    autoRefreshTimer = null;
+                }
+            }
+        }
+        
+        // Initial countdown
+        updateCountdown();
+        
+        // Set up event listeners
+        refreshButton.addEventListener('click', refreshQRCode);
+        autoRefreshToggle.addEventListener('change', setupAutoRefresh);
+        
+        // Initial setup of auto-refresh
+        setupAutoRefresh();
+    });
+</script>
+{% endif %}
+{% endblock %} 

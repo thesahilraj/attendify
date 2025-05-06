@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register - Attendify{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center mb-4">
+        <h2><i class="fas fa-user-plus me-2"></i>Create an Account</h2>
+        <p class="text-muted">Choose the type of account you want to create</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow h-100">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0"><i class="fas fa-user-graduate me-2"></i>Student</h4>
+            </div>
+            <div class="card-body p-4 text-center">
+                <img src="{% static 'img/student.svg' %}" alt="Student" class="img-fluid mb-3" style="max-height: 150px; opacity: 0.8;">
+                <h5 class="mb-3">Register as a Student</h5>
+                <p class="text-muted mb-4">Create a student account to mark your attendance using QR codes for your classes.</p>
+                <ul class="list-group mb-4 text-start">
+                    <li class="list-group-item"><i class="fas fa-check text-success me-2"></i>Mark attendance with QR codes</li>
+                    <li class="list-group-item"><i class="fas fa-check text-success me-2"></i>View your attendance records</li>
+                    <li class="list-group-item"><i class="fas fa-check text-success me-2"></i>Access course information</li>
+                </ul>
+                <div class="d-grid">
+                    <a href="{% url 'student_registration' %}" class="btn btn-primary btn-lg" id="student-reg-page-btn">
+                        <i class="fas fa-user-plus me-2"></i>Register as Student
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-5">
+        <div class="card shadow h-100">
+            <div class="card-header bg-secondary text-white text-center">
+                <h4 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Teacher</h4>
+            </div>
+            <div class="card-body p-4 text-center">
+                <img src="{% static 'img/teacher.svg' %}" alt="Teacher" class="img-fluid mb-3" style="max-height: 150px; opacity: 0.8;">
+                <h5 class="mb-3">Register as a Teacher</h5>
+                <p class="text-muted mb-4">Create a teacher account to manage courses, generate QR codes, and track attendance.</p>
+                <ul class="list-group mb-4 text-start">
+                    <li class="list-group-item"><i class="fas fa-check text-success me-2"></i>Create and manage courses</li>
+                    <li class="list-group-item"><i class="fas fa-check text-success me-2"></i>Generate QR codes for attendance</li>
+                    <li class="list-group-item"><i class="fas fa-check text-success me-2"></i>View attendance reports</li>
+                </ul>
+                <div class="d-grid">
+                    <a href="{% url 'teacher_registration' %}" class="btn btn-secondary btn-lg" id="teacher-reg-page-btn">
+                        <i class="fas fa-user-plus me-2"></i>Register as Teacher
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10 text-center">
+        <p>Already have an account? <a href="{% url 'login' %}" class="fw-bold">Login here</a></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click event listeners to registration buttons
+        const studentRegBtn = document.getElementById('student-reg-page-btn');
+        const teacherRegBtn = document.getElementById('teacher-reg-page-btn');
+        
+        if (studentRegBtn) {
+            studentRegBtn.addEventListener('click', function(e) {
+                console.log('Student registration button clicked from landing page');
+                console.log('Navigating to:', this.getAttribute('href'));
+            });
+        }
+        
+        if (teacherRegBtn) {
+            teacherRegBtn.addEventListener('click', function(e) {
+                console.log('Teacher registration button clicked from landing page');
+                console.log('Navigating to:', this.getAttribute('href'));
+            });
+        }
+    });
+</script>
+{% endblock %} 

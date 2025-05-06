@@ -1,0 +1,6 @@
+Django==5.1.7
+django-crispy-forms==2.3
+crispy-bootstrap5==2024.10
+Pillow==11.1.0
+qrcode==8.0
+mysqlclient==2.2.7 

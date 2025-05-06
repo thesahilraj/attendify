@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Attendance Report - Attendify{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item active">Attendance Report</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Attendance Report</h4>
+            </div>
+            <div class="card-body">
+                <form method="get" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form.course|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.date_from|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.date_to|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                {% if attendances %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Course</th>
+                                    <th>Session Date</th>
+                                    <th>Session Time</th>
+                                    <th>Status</th>
+                                    <th>Marked At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attendance in attendances %}
+                                    <tr>
+                                        <td>{{ attendance.student.get_full_name|default:attendance.student.username }}</td>
+                                        <td>{{ attendance.session.course.code }} - {{ attendance.session.course.name }}</td>
+                                        <td>{{ attendance.session.date }}</td>
+                                        <td>{{ attendance.session.start_time }} - {{ attendance.session.end_time }}</td>
+                                        <td>
+                                            {% if attendance.is_present %}
+                                                <span class="badge bg-success">Present</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Absent</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ attendance.timestamp }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>No attendance records found with the selected filters.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Course Summary</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for course in courses %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">{{ course.code }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6>{{ course.name }}</h6>
+                                    <p><strong>Sessions:</strong> {{ course.sessions.count }}</p>
+                                    <a href="{% url 'attendance_report_course' course_id=course.id %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-filter"></i> Filter by this course
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <p>You haven't created any courses yet.</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

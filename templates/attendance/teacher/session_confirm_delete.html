@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Session - Attendify{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'course_list' %}">Courses</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'course_detail' pk=session.course.id %}">{{ session.course.code }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'session_detail' pk=session.id %}">Session</a></li>
+                <li class="breadcrumb-item active">Delete</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">Delete Session</h4>
+            </div>
+            <div class="card-body">
+                <p class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Warning: This action cannot be undone.
+                </p>
+                <p>Are you sure you want to delete the session for <strong>{{ session.course.name }}</strong> on <strong>{{ session.date }}</strong>?</p>
+                <p>This will also delete all attendance records associated with this session.</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'session_detail' pk=session.id %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

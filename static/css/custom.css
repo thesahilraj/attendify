@@ -1,0 +1,296 @@
+:root {
+  --primary: #4285F4;    /* Blue */
+  --secondary: #DB4437;  /* Red */
+  --accent: #F4B400;     /* Yellow */
+  --success: #0F9D58;    /* Green */
+  --light-bg: #f8f9fa;
+  --dark-text: #333333;
+  --light-text: #ffffff;
+}
+
+body {
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  background-color: var(--light-bg);
+  color: var(--dark-text);
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: var(--primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: var(--light-text) !important;
+}
+
+.navbar-nav .nav-link {
+  color: var(--light-text) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  opacity: 0.8;
+}
+
+.navbar-nav .active > .nav-link {
+  border-bottom: 2px solid var(--accent);
+}
+
+/* Card styling */
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  border: none;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  background-color: var(--primary);
+  color: var(--light-text);
+  border-radius: 8px 8px 0 0 !important;
+  font-weight: bold;
+  padding: 15px 20px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-footer {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 15px 20px;
+}
+
+/* Button styling */
+.btn {
+  border-radius: 4px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: #3b77db;
+  border-color: #3b77db;
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.btn-secondary:hover {
+  background-color: #c13c30;
+  border-color: #c13c30;
+}
+
+.btn-success {
+  background-color: var(--success);
+  border-color: var(--success);
+}
+
+.btn-success:hover {
+  background-color: #0d8a4c;
+  border-color: #0d8a4c;
+}
+
+.btn-warning {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--dark-text);
+}
+
+.btn-warning:hover {
+  background-color: #dba000;
+  border-color: #dba000;
+  color: var(--dark-text);
+}
+
+/* Table styling */
+.table {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead th {
+  background-color: var(--primary);
+  color: var(--light-text);
+  border-bottom: none;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(66, 133, 244, 0.05);
+}
+
+/* Form styling */
+.form-control {
+  border-radius: 4px;
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: var(--dark-text);
+}
+
+.form-text {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+/* QR code container */
+.qr-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.qr-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Dashboard stats */
+.stats-card {
+  text-align: center;
+  padding: 20px;
+}
+
+.stats-card .number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.stats-card.primary .number { color: var(--primary); }
+.stats-card.secondary .number { color: var(--secondary); }
+.stats-card.accent .number { color: var(--accent); }
+.stats-card.success .number { color: var(--success); }
+
+/* Attendance status indicators */
+.status-present {
+  color: var(--success);
+  font-weight: bold;
+}
+
+.status-absent {
+  color: var(--secondary);
+  font-weight: bold;
+}
+
+/* Pagination */
+.page-item.active .page-link {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.page-link {
+  color: var(--primary);
+}
+
+/* Footer */
+footer {
+  background-color: var(--primary);
+  color: var(--light-text);
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 15px;
+  }
+  
+  .stats-card .number {
+    font-size: 2rem;
+  }
+}
+
+/* Registration form styling */
+.registration-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.registration-form label {
+  font-weight: 500;
+  color: var(--dark-text);
+}
+
+.registration-form .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+}
+
+.registration-form .form-text {
+  font-size: 0.8rem;
+}
+
+.registration-form .asteriskField {
+  color: var(--secondary);
+  margin-left: 3px;
+}
+
+.registration-form .section-heading {
+  border-bottom: 2px solid rgba(66, 133, 244, 0.1);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+.registration-form .password-help-text {
+  background-color: var(--light-bg);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.registration-form .btn-lg {
+  padding: 12px 24px;
+  font-weight: 500;
+}
+
+/* Student specific */
+.student-form .section-heading {
+  border-color: rgba(66, 133, 244, 0.2);
+}
+
+/* Teacher specific */
+.teacher-form .section-heading {
+  border-color: rgba(219, 68, 55, 0.2);
+}
+
+.teacher-form .asteriskField {
+  color: var(--secondary);
+} 
